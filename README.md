@@ -5,6 +5,6 @@ running the project:
 2. install packages - yarn install
 3. run local server
 
-   vite dev - dev version
+   vite - dev version
    
    vite build - release version
