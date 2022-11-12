@@ -1,19 +1,32 @@
-import { AmbientLight, Scene } from "three";
+import { AnimationMixer, Clock, Scene } from "three";
 import { Lights } from "./models/Lights";
 import { Scenery } from "./models/Scenery";
+import { Player } from "./models/Player";
 
 export class GameScene extends Scene {
-  async loadModels() {
-    const lights = new Lights();
-    this.add(lights.directionalLight, lights.ambientLight);
+  player = new Player();
+  scenery = new Scenery();
+  lights = new Lights();
+  clock = new Clock();
 
-    const scenery = new Scenery();
-    await scenery.initializeScenery();
-    this.add(scenery.scenery3D);
+  async loadModels() {
+    this.add(this.lights.directionalLight, this.lights.ambientLight);
+
+    await this.scenery.initializeScenery();
+    this.add(this.scenery.model);
+
+    await this.player.initialize();
+    this.add(this.player.model);
+
+    await this.player.makePlayerRun();
   }
 
   cleanup() {}
 
-  update = () => {};
+  update() {
+    if (!this.player.animationMixer) return;
+    this.player.update(this.clock.getDelta());
+  }
+
   initialize = () => {};
 }
