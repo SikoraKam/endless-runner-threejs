@@ -2,6 +2,7 @@ import { AnimationMixer, Clock, Scene } from "three";
 import { Lights } from "./models/Lights";
 import { Scenery } from "./models/Scenery";
 import { Player } from "./models/Player";
+import { TWEEN } from "three/examples/jsm/libs/tween.module.min";
 
 export class GameScene extends Scene {
   player = new Player();
@@ -26,7 +27,18 @@ export class GameScene extends Scene {
   update() {
     if (!this.player.animationMixer) return;
     this.player.update(this.clock.getDelta());
+    this.scenery.moveScenery(this.clock.getDelta());
+    TWEEN.update();
   }
 
-  initialize = () => {};
+  initialize() {
+    document.onkeydown = (event) => {
+      if (event.key === "ArrowLeft") {
+        this.player.moveLeft();
+      }
+      if (event.key === "ArrowRight") {
+        this.player.moveRight();
+      }
+    };
+  }
 }

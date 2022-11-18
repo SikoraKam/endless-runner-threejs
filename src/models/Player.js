@@ -1,11 +1,18 @@
 import { AnimationMixer, Object3D } from "three";
 import { FBXLoader } from "three/examples/jsm/loaders/FBXLoader";
+import {
+  DISTANCE_BETWEEN_TRACKS,
+  MOVE_TO_SIDE_DURATION,
+  TRACK,
+} from "../const";
+import { TWEEN } from "three/examples/jsm/libs/tween.module.min";
 
 export class Player {
   fbxLoader = new FBXLoader();
   model = new Object3D();
   animationMixer;
   runningAnimation;
+  currentTrack = TRACK.CENTER;
 
   async initialize() {
     this.model = await this.fbxLoader.loadAsync("xbot.fbx");
@@ -20,6 +27,54 @@ export class Player {
     const { animations } = await this.fbxLoader.loadAsync("xbot@running.fbx");
     this.runningAnimation = this.animationMixer.clipAction(animations[0]);
     this.runningAnimation.play();
+  }
+
+  changeTrackAnimation() {
+    // TODO
+  }
+
+  moveLeft() {
+    // TODO: fix - prevent going out of the box (ideas adding debounce, keeping track)
+    console.log("move left", this.currentTrack);
+    const positionX = this.model.position.x;
+    if (positionX === -DISTANCE_BETWEEN_TRACKS) return;
+
+    const animationToLeft = new TWEEN.Tween(this.model.position)
+      .to({ x: positionX - DISTANCE_BETWEEN_TRACKS }, MOVE_TO_SIDE_DURATION)
+      .easing(TWEEN.Easing.Quadratic.Out)
+      .onUpdate(() => {
+        if (positionX <= -DISTANCE_BETWEEN_TRACKS) {
+          this.model.position.x = -DISTANCE_BETWEEN_TRACKS;
+        }
+        this.changeTrackAnimation();
+      })
+      .onComplete(() => {
+        // TODO: update rotation if necessary after implementing changeTrackAnimation
+      });
+
+    animationToLeft.start();
+  }
+
+  moveRight() {
+    console.log("move right", this.currentTrack);
+    const positionX = this.model.position.x;
+
+    if (positionX === DISTANCE_BETWEEN_TRACKS) return;
+
+    const animationToRight = new TWEEN.Tween(this.model.position)
+      .to({ x: positionX + DISTANCE_BETWEEN_TRACKS }, MOVE_TO_SIDE_DURATION)
+      .easing(TWEEN.Easing.Quadratic.Out)
+      .onUpdate(() => {
+        if (positionX >= DISTANCE_BETWEEN_TRACKS) {
+          this.model.position.x = DISTANCE_BETWEEN_TRACKS;
+        }
+        this.changeTrackAnimation();
+      })
+      .onComplete(() => {
+        // TODO: update if necessary after implementing changeTrackAnimation
+      });
+
+    animationToRight.start();
   }
 
   update(deltaTime) {
