@@ -25,6 +25,7 @@ export class GameScene extends Scene {
     this.add(this.player.model);
 
     await this.player.makePlayerRun();
+    await this.player.makePlayerJump();
   }
 
   cleanup() {}
@@ -37,11 +38,14 @@ export class GameScene extends Scene {
   }
 
   initialize() {
-    this.eventBus.on(EVENTS.ARROW_LEFT_DOWN, () => {
+    this.eventBus.on(EVENTS.ARROW_LEFT_CLICK, () => {
       this.player.moveLeft();
     });
-    this.eventBus.on(EVENTS.ARROW_RIGHT_DOWN, () => {
+    this.eventBus.on(EVENTS.ARROW_RIGHT_CLICK, () => {
       this.player.moveRight();
+    });
+    this.eventBus.on(EVENTS.ARROW_UP_CLICK, () => {
+      this.player.jump();
     });
   }
 }

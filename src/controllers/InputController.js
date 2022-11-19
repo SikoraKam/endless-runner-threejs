@@ -14,10 +14,13 @@ export default class InputController extends Controller {
       throttle(
         (event) => {
           if (event.key === "ArrowLeft") {
-            this.eventBus.emit(EVENTS.ARROW_LEFT_DOWN);
+            this.eventBus.emit(EVENTS.ARROW_LEFT_CLICK);
           }
           if (event.key === "ArrowRight") {
-            this.eventBus.emit(EVENTS.ARROW_RIGHT_DOWN);
+            this.eventBus.emit(EVENTS.ARROW_RIGHT_CLICK);
+          }
+          if (event.key === "ArrowUp") {
+            this.eventBus.emit(EVENTS.ARROW_UP_CLICK);
           }
         },
         200,

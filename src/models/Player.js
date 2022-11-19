@@ -2,6 +2,8 @@ import { AnimationMixer, Object3D } from "three";
 import { FBXLoader } from "three/examples/jsm/loaders/FBXLoader";
 import {
   DISTANCE_BETWEEN_TRACKS,
+  HEIGHT_OF_JUMP,
+  JUMP_DURATION,
   MOVE_TO_SIDE_DURATION,
   TRACK,
 } from "../const";
@@ -11,7 +13,12 @@ export class Player {
   fbxLoader = new FBXLoader();
   model = new Object3D();
   animationMixer;
+  currentAnimation;
   runningAnimation;
+  jumpingAnimation;
+  isJumping = false;
+  // jumpingUp;
+  // jumpingDown;
   currentTrack = TRACK.CENTER;
 
   async initialize() {
@@ -27,6 +34,12 @@ export class Player {
     const { animations } = await this.fbxLoader.loadAsync("xbot@running.fbx");
     this.runningAnimation = this.animationMixer.clipAction(animations[0]);
     this.runningAnimation.play();
+    this.currentAnimation = this.runningAnimation;
+  }
+
+  async makePlayerJump() {
+    const { animations } = await this.fbxLoader.loadAsync("running-jump.fbx");
+    this.jumpingAnimation = this.animationMixer.clipAction(animations[0]);
   }
 
   changeTrackAnimation() {
@@ -78,6 +91,45 @@ export class Player {
       });
 
     animationToRight.start();
+  }
+
+  jump() {
+    if (this.isJumping) return;
+    this.isJumping = true;
+    this.currentAnimation.stop();
+    this.currentAnimation = this.jumpingAnimation;
+    this.currentAnimation.reset();
+    this.currentAnimation.setLoop(1, 1);
+    this.currentAnimation.clampWhenFinished = true;
+    this.currentAnimation.play();
+    this.animationMixer.addEventListener("finished", () => {
+      this.currentAnimation
+        .crossFadeTo(this.runningAnimation, 0.1, false)
+        .play();
+      this.currentAnimation = this.runningAnimation;
+    });
+    const jumpingUpAnimation = new TWEEN.Tween(this.model.position).to(
+      {
+        y: (this.model.position.y += HEIGHT_OF_JUMP),
+      },
+      JUMP_DURATION
+    );
+
+    const jumpingDownAnimation = new TWEEN.Tween(this.model.position).to(
+      {
+        y: (this.model.position.y -= HEIGHT_OF_JUMP),
+      },
+      JUMP_DURATION
+    );
+    jumpingDownAnimation.onComplete(() => {
+      this.isJumping = false;
+      // this.model.position.y = -35;
+    });
+
+    jumpingUpAnimation.start();
+    jumpingUpAnimation.onComplete(() => {
+      jumpingDownAnimation.start();
+    });
   }
 
   update(deltaTime) {
