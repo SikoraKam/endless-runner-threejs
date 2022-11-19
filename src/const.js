@@ -1,5 +1,7 @@
 // animations
 export const MOVE_TO_SIDE_DURATION = 300; // ms
+export const HEIGHT_OF_JUMP = 20;
+export const JUMP_DURATION = 400;
 
 // distances
 export const DISTANCE_TO_SWITCH_SCENERY = 600;
