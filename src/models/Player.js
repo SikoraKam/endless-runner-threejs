@@ -34,8 +34,6 @@ export class Player {
   }
 
   moveLeft() {
-    // TODO: fix - prevent going out of the box (ideas adding debounce, keeping track)
-    console.log("move left", this.currentTrack);
     const positionX = this.model.position.x;
     if (positionX === -DISTANCE_BETWEEN_TRACKS) return;
     if (this.currentTrack === TRACK.LEFT) return;
@@ -59,7 +57,6 @@ export class Player {
   }
 
   moveRight() {
-    console.log("move right", this.currentTrack);
     const positionX = this.model.position.x;
 
     if (positionX === DISTANCE_BETWEEN_TRACKS) return;
