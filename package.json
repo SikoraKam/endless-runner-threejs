@@ -12,6 +12,7 @@
     "vite": "^3.2.3"
   },
   "dependencies": {
+    "lodash": "^4.17.21",
     "prettier": "^2.7.1",
     "three": "^0.146.0"
   }

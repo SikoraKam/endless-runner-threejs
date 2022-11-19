@@ -1,6 +1,7 @@
 import { PerspectiveCamera, WebGLRenderer } from "three";
 import { GameScene } from "./src/GameScene";
 import { onWindowResize } from "./src/utils";
+import InputController from "./src/controllers/InputController";
 
 const width = window.innerWidth;
 const height = window.innerHeight;
@@ -28,4 +29,6 @@ const gameLoop = async () => {
 window.addEventListener("resize", () =>
   onWindowResize(perspectiveCamera, renderer)
 );
+
+new InputController();
 gameLoop();

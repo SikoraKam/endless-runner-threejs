@@ -1,0 +1,4 @@
+export default {
+  ARROW_LEFT_DOWN: "ARROW_LEFT_DOWN",
+  ARROW_RIGHT_DOWN: "ARROW_RIGHT_DOWN",
+};
