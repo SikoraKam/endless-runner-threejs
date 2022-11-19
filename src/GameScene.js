@@ -3,12 +3,17 @@ import { Lights } from "./models/Lights";
 import { Scenery } from "./models/Scenery";
 import { Player } from "./models/Player";
 import { TWEEN } from "three/examples/jsm/libs/tween.module.min";
+import {} from "./events/EventBus.js";
+import { debounce } from "lodash";
+import EVENTS from "./events/events.js";
+import eventBus from "./events/EventBus";
 
 export class GameScene extends Scene {
   player = new Player();
   scenery = new Scenery();
   lights = new Lights();
   clock = new Clock();
+  eventBus = eventBus;
 
   async loadModels() {
     this.add(this.lights.directionalLight, this.lights.ambientLight);
@@ -32,13 +37,11 @@ export class GameScene extends Scene {
   }
 
   initialize() {
-    document.onkeydown = (event) => {
-      if (event.key === "ArrowLeft") {
-        this.player.moveLeft();
-      }
-      if (event.key === "ArrowRight") {
-        this.player.moveRight();
-      }
-    };
+    this.eventBus.on(EVENTS.ARROW_LEFT_DOWN, () => {
+      this.player.moveLeft();
+    });
+    this.eventBus.on(EVENTS.ARROW_RIGHT_DOWN, () => {
+      this.player.moveRight();
+    });
   }
 }

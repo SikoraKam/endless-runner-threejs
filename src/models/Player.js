@@ -38,6 +38,9 @@ export class Player {
     console.log("move left", this.currentTrack);
     const positionX = this.model.position.x;
     if (positionX === -DISTANCE_BETWEEN_TRACKS) return;
+    if (this.currentTrack === TRACK.LEFT) return;
+    this.currentTrack =
+      this.currentTrack === TRACK.CENTER ? TRACK.LEFT : TRACK.CENTER;
 
     const animationToLeft = new TWEEN.Tween(this.model.position)
       .to({ x: positionX - DISTANCE_BETWEEN_TRACKS }, MOVE_TO_SIDE_DURATION)
@@ -60,6 +63,9 @@ export class Player {
     const positionX = this.model.position.x;
 
     if (positionX === DISTANCE_BETWEEN_TRACKS) return;
+    if (this.currentTrack === TRACK.RIGHT) return;
+    this.currentTrack =
+      this.currentTrack === TRACK.CENTER ? TRACK.RIGHT : TRACK.CENTER;
 
     const animationToRight = new TWEEN.Tween(this.model.position)
       .to({ x: positionX + DISTANCE_BETWEEN_TRACKS }, MOVE_TO_SIDE_DURATION)
