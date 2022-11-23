@@ -7,12 +7,14 @@ import {} from "./events/EventBus.js";
 import { debounce } from "lodash";
 import EVENTS from "./events/events.js";
 import eventBus from "./events/EventBus";
+import { ObstaclesGroup } from "./models/ObstaclesGroup";
 
 export class GameScene extends Scene {
   player = new Player();
   scenery = new Scenery();
   lights = new Lights();
   clock = new Clock();
+  obstaclesGroup = new ObstaclesGroup();
   eventBus = eventBus;
 
   async loadModels() {
@@ -26,6 +28,10 @@ export class GameScene extends Scene {
 
     await this.player.makePlayerRun();
     await this.player.makePlayerJump();
+
+    await this.obstaclesGroup.load();
+    // DONT FORGET ABOUT ADDING TO SCENE SOMEWHERE
+    // this.add(this.obstaclesGroup.createObstacleGroup());
   }
 
   cleanup() {}

@@ -17,8 +17,6 @@ export class Player {
   runningAnimation;
   jumpingAnimation;
   isJumping = false;
-  // jumpingUp;
-  // jumpingDown;
   currentTrack = TRACK.CENTER;
 
   async initialize() {
