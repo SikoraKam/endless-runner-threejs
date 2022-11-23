@@ -41,6 +41,7 @@ export class GameScene extends Scene {
     const delta = this.clock.getDelta();
     if (!this.player.animationMixer) return;
     this.player.update(delta);
+    this.scenery.moveScenery(delta);
     TWEEN.update();
 
     this.obstaclesGroup.spawnObstacles(delta, this.scenery.speed);
