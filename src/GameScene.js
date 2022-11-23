@@ -7,12 +7,14 @@ import {} from "./events/EventBus.js";
 import { debounce } from "lodash";
 import EVENTS from "./events/events.js";
 import eventBus from "./events/EventBus";
+import { ObstaclesGroups } from "./models/ObstaclesGroups";
 
 export class GameScene extends Scene {
   player = new Player();
   scenery = new Scenery();
   lights = new Lights();
   clock = new Clock();
+  obstaclesGroup = new ObstaclesGroups();
   eventBus = eventBus;
 
   async loadModels() {
@@ -26,15 +28,22 @@ export class GameScene extends Scene {
 
     await this.player.makePlayerRun();
     await this.player.makePlayerJump();
+
+    await this.obstaclesGroup.load();
+    // DONT FORGET ABOUT ADDING TO SCENE SOMEWHERE
+    this.add(this.obstaclesGroup.firstVisibleObstacleGroup);
+    this.add(this.obstaclesGroup.secondVisibleObstacleGroup);
   }
 
   cleanup() {}
 
   update() {
+    const delta = this.clock.getDelta();
     if (!this.player.animationMixer) return;
-    this.player.update(this.clock.getDelta());
-    this.scenery.moveScenery(this.clock.getDelta());
+    this.player.update(delta);
     TWEEN.update();
+
+    this.obstaclesGroup.spawnObstacles(delta, this.scenery.speed);
   }
 
   initialize() {
