@@ -6,13 +6,12 @@ import {
 } from "../const";
 import { VerticalObstacle } from "./VerticalObstacle";
 import { HorizontalObstacle } from "./HorizontalObstacle";
-import { instance } from "three/examples/jsm/nodes/shadernode/ShaderNodeElements";
 import { Group } from "three";
 
-export class ObstaclesGroup {
+export class ObstaclesGroups {
   obstaclesArray = [];
   verticalObstacle = new VerticalObstacle();
-  horizontalObstacle = new VerticalObstacle();
+  horizontalObstacle = new HorizontalObstacle();
 
   firstVisibleObstacleGroup = new Group();
   secondVisibleObstacleGroup = new Group();
@@ -20,6 +19,10 @@ export class ObstaclesGroup {
   async load() {
     await this.verticalObstacle.load();
     await this.horizontalObstacle.load();
+
+    this.firstVisibleObstacleGroup = this.createObstacleGroup();
+    this.secondVisibleObstacleGroup = this.createObstacleGroup();
+    this.secondVisibleObstacleGroup.position.z -= 450;
   }
 
   createObstacleOnLeft(obstacleObject) {
@@ -40,9 +43,7 @@ export class ObstaclesGroup {
   getRandomObstacle() {
     const random = Math.floor(Math.random() * 3);
     // 66% chances of getting horizontal obstacle
-    return random < 1
-      ? this.verticalObstacle.getObstacleClone()
-      : this.horizontalObstacle.getObstacleClone();
+    return random < 1 ? this.verticalObstacle : this.horizontalObstacle;
   }
 
   placeObstaclesOnRandomPosition(array) {
@@ -76,12 +77,34 @@ export class ObstaclesGroup {
     this.placeObstaclesOnRandomPosition(placedObstacles);
 
     const meshGroup = new Group();
-    placedObstacles.forEach((obstacle) => meshGroup.add(obstacle));
+    placedObstacles.forEach((obstacle) => {
+      if (!obstacle) return;
+      meshGroup.add(obstacle);
+    });
     meshGroup.position.set(0, 0, DISTANCE_OF_NEXT_OBSTACLE_GROUP);
-    meshGroup.visible = false;
+    meshGroup.visible = true;
     this.obstaclesArray.push(meshGroup);
     return meshGroup;
   }
 
-  spawnObstacles() {} // rather move to gameScene together with firstvisible and secondVisible
+  spawnObstacles(delta, speed) {
+    const gameScene = this.firstVisibleObstacleGroup.parent;
+
+    this.firstVisibleObstacleGroup.position.z += speed * delta;
+    this.secondVisibleObstacleGroup.position.z += speed * delta;
+
+    if (this.firstVisibleObstacleGroup.position.z > -40) {
+      this.firstVisibleObstacleGroup.removeFromParent();
+      this.firstVisibleObstacleGroup = this.createObstacleGroup();
+      gameScene.add(this.firstVisibleObstacleGroup);
+    }
+
+    if (this.secondVisibleObstacleGroup.position.z > -40) {
+      this.secondVisibleObstacleGroup.removeFromParent();
+      this.secondVisibleObstacleGroup = this.createObstacleGroup();
+      gameScene.add(this.secondVisibleObstacleGroup);
+      this.secondVisibleObstacleGroup.position.z =
+        this.firstVisibleObstacleGroup.position.z - 450;
+    }
+  }
 }

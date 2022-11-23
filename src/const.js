@@ -6,7 +6,7 @@ export const JUMP_DURATION = 400;
 // distances
 export const DISTANCE_TO_SWITCH_SCENERY = 600;
 export const DISTANCE_BETWEEN_TRACKS = 18;
-export const DISTANCE_OF_NEXT_OBSTACLE_GROUP = -800;
+export const DISTANCE_OF_NEXT_OBSTACLE_GROUP = -1100;
 
 // types
 export const TRACK = {
