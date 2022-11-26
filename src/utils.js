@@ -1,5 +1,4 @@
 import { OBSTACLE_COLLISION_RANGE, TRACK } from "./const";
-import { element } from "three/examples/jsm/nodes/shadernode/ShaderNodeBaseElements";
 
 export const onWindowResize = (camera, renderer) => {
   const width = window.innerWidth;
@@ -29,7 +28,6 @@ export const collisionDetect = (player, obstacleGroup, obstacleBox) => {
   const obstaclePositionZ = obstacleGroup.position.z;
   const playerPositionZ = player.model.position.z;
 
-  // console.log(obstacleGroup);
   if (
     playerPositionZ >= obstaclePositionZ + OBSTACLE_COLLISION_RANGE ||
     playerPositionZ <= obstaclePositionZ - OBSTACLE_COLLISION_RANGE
