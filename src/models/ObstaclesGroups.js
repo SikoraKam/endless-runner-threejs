@@ -6,7 +6,7 @@ import {
 } from "../const";
 import { VerticalObstacle } from "./VerticalObstacle";
 import { HorizontalObstacle } from "./HorizontalObstacle";
-import { Group } from "three";
+import { Box3, Group, Vector3 } from "three";
 
 export class ObstaclesGroups {
   obstaclesArray = [];
@@ -15,6 +15,7 @@ export class ObstaclesGroups {
 
   firstVisibleObstacleGroup = new Group();
   secondVisibleObstacleGroup = new Group();
+  obstacleBox = new Box3(new Vector3(), new Vector3());
 
   async load() {
     await this.verticalObstacle.load();
@@ -106,5 +107,12 @@ export class ObstaclesGroups {
       this.secondVisibleObstacleGroup.position.z =
         this.firstVisibleObstacleGroup.position.z - 450;
     }
+  }
+
+  getCloserObstacleGroup() {
+    return this.firstVisibleObstacleGroup.position.z >
+      this.secondVisibleObstacleGroup.position.z
+      ? this.firstVisibleObstacleGroup
+      : this.secondVisibleObstacleGroup;
   }
 }

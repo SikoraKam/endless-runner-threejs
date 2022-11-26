@@ -21,3 +21,7 @@ export const VERTICAL_OBSTACLE_SCALE_ARRAY = [0.06, 0.06, 0.06];
 export const OBSTACLE_LEFT_POSITION_X = -20;
 export const OBSTACLE_CENTER_POSITION_X = 0;
 export const OBSTACLE_RIGHT_POSITION_X = 20;
+export const OBSTACLE_COLLISION_RANGE = 10;
+
+//player
+export const PLAYER_BOX_POSITION_Y = 90;
