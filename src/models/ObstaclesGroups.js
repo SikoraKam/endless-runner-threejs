@@ -6,12 +6,13 @@ import {
 } from "../const";
 import { VerticalObstacle } from "./VerticalObstacle";
 import { HorizontalObstacle } from "./HorizontalObstacle";
-import { Box3, Group, Vector3 } from "three";
+import { Box3, Group, Object3D, Vector3 } from "three";
 
 export class ObstaclesGroups {
   obstaclesArray = [];
   verticalObstacle = new VerticalObstacle();
   horizontalObstacle = new HorizontalObstacle();
+  emptyObstacleImitation = new Object3D();
 
   firstVisibleObstacleGroup = new Group();
   secondVisibleObstacleGroup = new Group();
@@ -26,18 +27,28 @@ export class ObstaclesGroups {
     this.secondVisibleObstacleGroup.position.z -= 450;
   }
 
+  createEmptyObstacleImitation(positionX) {
+    const mesh = this.emptyObstacleImitation.clone();
+    // set y outside scene
+    mesh.position.set(positionX, -999999, 0);
+    return mesh;
+  }
+
   createObstacleOnLeft(obstacleObject) {
-    if (!obstacleObject) return null;
+    if (!obstacleObject)
+      return this.createEmptyObstacleImitation(OBSTACLE_LEFT_POSITION_X);
     return obstacleObject.createObstacle(OBSTACLE_LEFT_POSITION_X);
   }
 
   createObstacleOnCenter(obstacleObject) {
-    if (!obstacleObject) return null;
+    if (!obstacleObject)
+      return this.createEmptyObstacleImitation(OBSTACLE_CENTER_POSITION_X);
     return obstacleObject.createObstacle(OBSTACLE_CENTER_POSITION_X);
   }
 
   createObstacleOnRight(obstacleObject) {
-    if (!obstacleObject) return null;
+    if (!obstacleObject)
+      return this.createEmptyObstacleImitation(OBSTACLE_RIGHT_POSITION_X);
     return obstacleObject.createObstacle(OBSTACLE_RIGHT_POSITION_X);
   }
 
@@ -79,7 +90,7 @@ export class ObstaclesGroups {
 
     const meshGroup = new Group();
     placedObstacles.forEach((obstacle) => {
-      if (!obstacle) return;
+      if (!obstacle) meshGroup.add(new Group());
       meshGroup.add(obstacle);
     });
     meshGroup.position.set(0, 0, DISTANCE_OF_NEXT_OBSTACLE_GROUP);
@@ -110,6 +121,13 @@ export class ObstaclesGroups {
   }
 
   getCloserObstacleGroup() {
+    // if (
+    //   this.firstVisibleObstacleGroup.position.z >
+    //   this.secondVisibleObstacleGroup.position.z
+    // )
+    //   console.log("FIRST ---------------");
+    // else console.log("SECOND ---------------");
+
     return this.firstVisibleObstacleGroup.position.z >
       this.secondVisibleObstacleGroup.position.z
       ? this.firstVisibleObstacleGroup

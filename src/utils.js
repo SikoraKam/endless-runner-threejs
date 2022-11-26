@@ -1,4 +1,5 @@
 import { OBSTACLE_COLLISION_RANGE, TRACK } from "./const";
+import { element } from "three/examples/jsm/nodes/shadernode/ShaderNodeBaseElements";
 
 export const onWindowResize = (camera, renderer) => {
   const width = window.innerWidth;
@@ -13,10 +14,16 @@ export const gameOver = () => {
   console.log("gane over");
 };
 
-const mapTrackToPosition = (track) => {
-  if (track === TRACK.LEFT) return 0;
-  if (track === TRACK.CENTER) return 1;
-  if (track === TRACK.RIGHT) return 2;
+const getObstacleOnTrack = (track, obstacleGroup) => {
+  // obstacles were randomly placed in createObstacleGroup to receive different layouts
+  const sortedByPosition = obstacleGroup.children.sort(
+    (obs1, obs2) => obs1.position.x - obs2.position.x
+  );
+
+  console.log("SORTED --", sortedByPosition);
+  if (track === TRACK.LEFT) return sortedByPosition[0];
+  if (track === TRACK.CENTER) return sortedByPosition[1];
+  if (track === TRACK.RIGHT) return sortedByPosition[2];
 };
 
 export const collisionDetect = (player, obstacleGroup, obstacleBox) => {
@@ -31,11 +38,15 @@ export const collisionDetect = (player, obstacleGroup, obstacleBox) => {
     return;
 
   // get obstacle for actual player track
-  const obstaclePosition = mapTrackToPosition(player.currentTrack);
-  const obstacleOnTrack = obstacleGroup.children[obstaclePosition];
+  const obstacleOnTrack = getObstacleOnTrack(
+    player.currentTrack,
+    obstacleGroup
+  );
+
   if (!obstacleOnTrack) return;
   obstacleBox.setFromObject(obstacleOnTrack);
 
+  // console.log(obstacleGroup.children);
   console.log(obstacleBox, player.boxCollider);
 
   if (player.boxCollider.intersectsBox(obstacleBox)) gameOver();
