@@ -8,6 +8,7 @@ import { debounce } from "lodash";
 import EVENTS from "./events/events.js";
 import eventBus from "./events/EventBus";
 import { ObstaclesGroups } from "./models/ObstaclesGroups";
+import { collisionDetect } from "./utils";
 
 export class GameScene extends Scene {
   player = new Player();
@@ -45,6 +46,11 @@ export class GameScene extends Scene {
     TWEEN.update();
 
     this.obstaclesGroup.spawnObstacles(delta, this.scenery.speed);
+    collisionDetect(
+      this.player,
+      this.obstaclesGroup.getCloserObstacleGroup(),
+      this.obstaclesGroup.obstacleBox
+    );
   }
 
   initialize() {

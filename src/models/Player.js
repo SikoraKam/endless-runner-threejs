@@ -1,10 +1,19 @@
-import { AnimationMixer, Object3D } from "three";
+import {
+  AnimationMixer,
+  Box3,
+  BoxGeometry,
+  Mesh,
+  MeshPhongMaterial,
+  Object3D,
+  Vector3,
+} from "three";
 import { FBXLoader } from "three/examples/jsm/loaders/FBXLoader";
 import {
   DISTANCE_BETWEEN_TRACKS,
   HEIGHT_OF_JUMP,
   JUMP_DURATION,
   MOVE_TO_SIDE_DURATION,
+  PLAYER_BOX_POSITION_Y,
   TRACK,
 } from "../const";
 import { TWEEN } from "three/examples/jsm/libs/tween.module.min";
@@ -18,6 +27,17 @@ export class Player {
   jumpingAnimation;
   isJumping = false;
   currentTrack = TRACK.CENTER;
+  modelBox = new Mesh(
+    new BoxGeometry(),
+    new MeshPhongMaterial({ color: 0x0000ff })
+  );
+  boxCollider = new Box3(new Vector3(), new Vector3());
+
+  setPlayerBox() {
+    this.modelBox.scale.set(50, 200, 20);
+    this.modelBox.position.set(0, PLAYER_BOX_POSITION_Y, 0);
+    this.model.add(this.modelBox);
+  }
 
   async initialize() {
     this.model = await this.fbxLoader.loadAsync("xbot.fbx");
@@ -25,6 +45,8 @@ export class Player {
     this.model.position.y = -35;
     this.model.scale.set(0.1, 0.1, 0.1);
     this.model.rotation.y = 180 * (Math.PI / 180);
+
+    this.setPlayerBox();
   }
 
   async makePlayerRun() {
@@ -132,5 +154,6 @@ export class Player {
 
   update(deltaTime) {
     this.animationMixer.update(deltaTime);
+    this.boxCollider.setFromObject(this.modelBox);
   }
 }
