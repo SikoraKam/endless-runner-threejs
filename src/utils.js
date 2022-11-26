@@ -11,7 +11,7 @@ export const onWindowResize = (camera, renderer) => {
 };
 
 export const gameOver = () => {
-  console.log("gane over");
+  console.log("game over");
 };
 
 const getObstacleOnTrack = (track, obstacleGroup) => {
@@ -20,7 +20,6 @@ const getObstacleOnTrack = (track, obstacleGroup) => {
     (obs1, obs2) => obs1.position.x - obs2.position.x
   );
 
-  console.log("SORTED --", sortedByPosition);
   if (track === TRACK.LEFT) return sortedByPosition[0];
   if (track === TRACK.CENTER) return sortedByPosition[1];
   if (track === TRACK.RIGHT) return sortedByPosition[2];
@@ -45,9 +44,6 @@ export const collisionDetect = (player, obstacleGroup, obstacleBox) => {
 
   if (!obstacleOnTrack) return;
   obstacleBox.setFromObject(obstacleOnTrack);
-
-  // console.log(obstacleGroup.children);
-  console.log(obstacleBox, player.boxCollider);
 
   if (player.boxCollider.intersectsBox(obstacleBox)) gameOver();
 };
