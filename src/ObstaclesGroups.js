@@ -3,9 +3,9 @@ import {
   OBSTACLE_CENTER_POSITION_X,
   OBSTACLE_LEFT_POSITION_X,
   OBSTACLE_RIGHT_POSITION_X,
-} from "../const";
-import { VerticalObstacle } from "./VerticalObstacle";
-import { HorizontalObstacle } from "./HorizontalObstacle";
+} from "./const";
+import { VerticalObstacle } from "./models/VerticalObstacle";
+import { HorizontalObstacle } from "./models/HorizontalObstacle";
 import { Box3, Group, Object3D, Vector3 } from "three";
 
 export class ObstaclesGroups {
@@ -121,13 +121,6 @@ export class ObstaclesGroups {
   }
 
   getCloserObstacleGroup() {
-    // if (
-    //   this.firstVisibleObstacleGroup.position.z >
-    //   this.secondVisibleObstacleGroup.position.z
-    // )
-    //   console.log("FIRST ---------------");
-    // else console.log("SECOND ---------------");
-
     return this.firstVisibleObstacleGroup.position.z >
       this.secondVisibleObstacleGroup.position.z
       ? this.firstVisibleObstacleGroup

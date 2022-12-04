@@ -7,6 +7,7 @@ export const JUMP_DURATION = 400;
 export const DISTANCE_TO_SWITCH_SCENERY = 600;
 export const DISTANCE_BETWEEN_TRACKS = 18;
 export const DISTANCE_OF_NEXT_OBSTACLE_GROUP = -1100;
+export const DISTANCE_BETWEEN_COINS = 20;
 
 // types
 export const TRACK = {
@@ -25,3 +26,7 @@ export const OBSTACLE_COLLISION_RANGE = 10;
 
 //player
 export const PLAYER_BOX_POSITION_Y = 90;
+
+//coin
+export const COIN_SCALE = 6;
+export const COIN_GROUP_POSITION_Z = -1200;

@@ -1,14 +1,13 @@
-import { AnimationMixer, Clock, Scene } from "three";
-import { Lights } from "./models/Lights";
+import { Clock, Scene } from "three";
+import { Lights } from "./Lights";
 import { Scenery } from "./models/Scenery";
 import { Player } from "./models/Player";
 import { TWEEN } from "three/examples/jsm/libs/tween.module.min";
-import {} from "./events/EventBus.js";
-import { debounce } from "lodash";
 import EVENTS from "./events/events.js";
 import eventBus from "./events/EventBus";
-import { ObstaclesGroups } from "./models/ObstaclesGroups";
+import { ObstaclesGroups } from "./ObstaclesGroups";
 import { collisionDetect } from "./utils";
+import { CoinGroup } from "./CoinGroup";
 
 export class GameScene extends Scene {
   player = new Player();
@@ -16,6 +15,7 @@ export class GameScene extends Scene {
   lights = new Lights();
   clock = new Clock();
   obstaclesGroup = new ObstaclesGroups();
+  coinsGroup = new CoinGroup();
   eventBus = eventBus;
 
   async loadModels() {
@@ -34,6 +34,9 @@ export class GameScene extends Scene {
     // DONT FORGET ABOUT ADDING TO SCENE SOMEWHERE
     this.add(this.obstaclesGroup.firstVisibleObstacleGroup);
     this.add(this.obstaclesGroup.secondVisibleObstacleGroup);
+
+    await this.coinsGroup.load();
+    this.add(this.coinsGroup.visibleCoinsGroup);
   }
 
   cleanup() {}
@@ -51,6 +54,8 @@ export class GameScene extends Scene {
       this.obstaclesGroup.getCloserObstacleGroup(),
       this.obstaclesGroup.obstacleBox
     );
+
+    this.coinsGroup.spawnCoins(delta, this.scenery.speed);
   }
 
   initialize() {
