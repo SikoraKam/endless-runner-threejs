@@ -30,3 +30,4 @@ export const PLAYER_BOX_POSITION_Y = 90;
 //coin
 export const COIN_SCALE = 6;
 export const COIN_GROUP_POSITION_Z = -1200;
+export const COIN_COLLISION_RANGE = 10;

@@ -6,8 +6,9 @@ import { TWEEN } from "three/examples/jsm/libs/tween.module.min";
 import EVENTS from "./events/events.js";
 import eventBus from "./events/EventBus";
 import { ObstaclesGroups } from "./ObstaclesGroups";
-import { collisionDetect } from "./utils";
+import { collisionDetect, pickupCoinDetect } from "./utils";
 import { CoinGroup } from "./CoinGroup";
+import { htmlInitialize, htmlUpdate } from "./htmlUtlis";
 
 export class GameScene extends Scene {
   player = new Player();
@@ -17,6 +18,7 @@ export class GameScene extends Scene {
   obstaclesGroup = new ObstaclesGroups();
   coinsGroup = new CoinGroup();
   eventBus = eventBus;
+  coinsAmount = 0;
 
   async loadModels() {
     this.add(this.lights.directionalLight, this.lights.ambientLight);
@@ -47,6 +49,7 @@ export class GameScene extends Scene {
     this.player.update(delta);
     this.scenery.moveScenery(delta);
     TWEEN.update();
+    htmlUpdate(this.coinsAmount);
 
     this.obstaclesGroup.spawnObstacles(delta, this.scenery.speed);
     collisionDetect(
@@ -55,10 +58,18 @@ export class GameScene extends Scene {
       this.obstaclesGroup.obstacleBox
     );
 
+    pickupCoinDetect(
+      this.player,
+      this.coinsGroup.visibleCoinsGroup,
+      this.coinsGroup.coinBox,
+      this.increaseCoinsAmount
+    );
+
     this.coinsGroup.spawnCoins(delta, this.scenery.speed);
   }
 
   initialize() {
+    htmlInitialize();
     this.eventBus.on(EVENTS.ARROW_LEFT_CLICK, () => {
       this.player.moveLeft();
     });
@@ -69,4 +80,8 @@ export class GameScene extends Scene {
       this.player.jump();
     });
   }
+
+  increaseCoinsAmount = () => {
+    this.coinsAmount++;
+  };
 }
