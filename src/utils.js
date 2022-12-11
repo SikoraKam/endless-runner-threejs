@@ -55,7 +55,12 @@ const getCoinsOnTrack = (track, coinsGroup) => {
     return coinsGroup.children.filter((coin) => coin.position.x > 0);
 };
 
-export const pickupCoinDetect = (player, coinGroup, coinBox) => {
+export const pickupCoinDetect = (
+  player,
+  coinGroup,
+  coinBox,
+  increaseCoinsAmount
+) => {
   const coinsOnTrack = getCoinsOnTrack(player.currentTrack, coinGroup);
   if (!coinsOnTrack?.length) return;
 
@@ -63,6 +68,7 @@ export const pickupCoinDetect = (player, coinGroup, coinBox) => {
     coinBox.setFromObject(coin);
     if (player.boxCollider.intersectsBox(coinBox)) {
       coin.visible = false;
+      increaseCoinsAmount();
     }
   });
 };

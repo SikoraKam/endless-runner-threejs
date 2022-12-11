@@ -1,0 +1,9 @@
+.coins-container {
+  position: absolute;
+  top: 0;
+  color: white;
+  right: 0;
+  padding: 0 10px 0 0px;
+  margin-top: 30px;
+  display: none;
+}
