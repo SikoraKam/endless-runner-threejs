@@ -6,7 +6,7 @@ import { TWEEN } from "three/examples/jsm/libs/tween.module.min";
 import EVENTS from "./events/events.js";
 import eventBus from "./events/EventBus";
 import { ObstaclesGroups } from "./ObstaclesGroups";
-import { collisionDetect } from "./utils";
+import { collisionDetect, pickupCoinDetect } from "./utils";
 import { CoinGroup } from "./CoinGroup";
 
 export class GameScene extends Scene {
@@ -53,6 +53,12 @@ export class GameScene extends Scene {
       this.player,
       this.obstaclesGroup.getCloserObstacleGroup(),
       this.obstaclesGroup.obstacleBox
+    );
+
+    pickupCoinDetect(
+      this.player,
+      this.coinsGroup.visibleCoinsGroup,
+      this.coinsGroup.coinBox
     );
 
     this.coinsGroup.spawnCoins(delta, this.scenery.speed);

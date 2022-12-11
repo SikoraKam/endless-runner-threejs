@@ -5,12 +5,12 @@ import {
   DISTANCE_BETWEEN_COINS,
   DISTANCE_BETWEEN_TRACKS,
 } from "./const";
-import { Group } from "three";
+import { Box3, Group, Vector3 } from "three";
 
 export class CoinGroup {
   coin = new Coin();
-  coinsArray = [];
   visibleCoinsGroup = new Group();
+  coinBox = new Box3(new Vector3(), new Vector3());
 
   async load() {
     await this.coin.load();

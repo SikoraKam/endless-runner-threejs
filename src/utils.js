@@ -1,4 +1,4 @@
-import { OBSTACLE_COLLISION_RANGE, TRACK } from "./const";
+import { COIN_COLLISION_RANGE, OBSTACLE_COLLISION_RANGE, TRACK } from "./const";
 
 export const onWindowResize = (camera, renderer) => {
   const width = window.innerWidth;
@@ -44,4 +44,25 @@ export const collisionDetect = (player, obstacleGroup, obstacleBox) => {
   obstacleBox.setFromObject(obstacleOnTrack);
 
   if (player.boxCollider.intersectsBox(obstacleBox)) gameOver();
+};
+
+const getCoinsOnTrack = (track, coinsGroup) => {
+  if (track === TRACK.LEFT)
+    return coinsGroup.children.filter((coin) => coin.position.x < 0);
+  if (track === TRACK.CENTER)
+    return coinsGroup.children.filter((coin) => coin.position.x === 0);
+  if (track === TRACK.RIGHT)
+    return coinsGroup.children.filter((coin) => coin.position.x > 0);
+};
+
+export const pickupCoinDetect = (player, coinGroup, coinBox) => {
+  const coinsOnTrack = getCoinsOnTrack(player.currentTrack, coinGroup);
+  if (!coinsOnTrack?.length) return;
+
+  coinsOnTrack?.forEach((coin) => {
+    coinBox.setFromObject(coin);
+    if (player.boxCollider.intersectsBox(coinBox)) {
+      coin.visible = false;
+    }
+  });
 };

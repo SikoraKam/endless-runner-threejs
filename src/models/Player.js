@@ -36,6 +36,7 @@ export class Player {
   setPlayerBox() {
     this.modelBox.scale.set(50, 200, 20);
     this.modelBox.position.set(0, PLAYER_BOX_POSITION_Y, 0);
+    this.modelBox.visible = false;
     this.model.add(this.modelBox);
   }
 
