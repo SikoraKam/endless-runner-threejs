@@ -25,6 +25,7 @@ export class GameScene extends Scene {
 
     await this.scenery.initializeScenery();
     this.add(this.scenery.model);
+    this.add(this.scenery.modelClone);
 
     await this.player.initialize();
     this.add(this.player.model);

@@ -12,6 +12,7 @@ const renderer = new WebGLRenderer({
   antialias: true,
   precision: "mediump",
 });
+renderer.setClearColor(0xe8fffc, 1);
 renderer.setSize(width, height);
 
 const render = () => {
