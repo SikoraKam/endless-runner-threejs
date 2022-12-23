@@ -3,7 +3,7 @@ import { Obstacle } from "./Obstacle";
 
 export class VerticalObstacle extends Obstacle {
   async load() {
-    this.model = await this.fbxLoader.loadAsync("spike.fbx");
+    this.model = await this.fbxLoader.loadAsync("traffic_cone/1.fbx");
   }
 
   getObstacleClone() {
@@ -13,7 +13,7 @@ export class VerticalObstacle extends Obstacle {
   createObstacle(positionX) {
     const mesh = this.model.clone();
     mesh.scale.set(...VERTICAL_OBSTACLE_SCALE_ARRAY);
-    mesh.position.set(positionX, -31, 0);
+    mesh.position.set(positionX, -35, 0);
     return mesh;
   }
 }

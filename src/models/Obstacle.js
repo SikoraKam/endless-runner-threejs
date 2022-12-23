@@ -1,7 +1,9 @@
 import { FBXLoader } from "three/examples/jsm/loaders/FBXLoader";
 import { Object3D } from "three";
+import { OBJLoader } from "three/examples/jsm/loaders/OBJLoader";
 
 export class Obstacle {
+  objLoader = new OBJLoader();
   fbxLoader = new FBXLoader();
   model = new Object3D();
 

@@ -3,7 +3,7 @@ import { Obstacle } from "./Obstacle";
 
 export class HorizontalObstacle extends Obstacle {
   async load() {
-    this.model = await this.fbxLoader.loadAsync("barrel.fbx");
+    this.model = await this.fbxLoader.loadAsync("red_barrier/barrier.fbx");
   }
 
   getObstacleClone() {
@@ -13,7 +13,8 @@ export class HorizontalObstacle extends Obstacle {
   createObstacle(positionX) {
     const mesh = this.model.clone();
     mesh.scale.set(...HORIZONTAL_OBSTACLE_SCALE_ARRAY);
-    mesh.position.set(positionX, -21, 0);
+    // mesh.rotateY(3.1415926536);
+    mesh.position.set(positionX, -35, 0);
     return mesh;
   }
 }
