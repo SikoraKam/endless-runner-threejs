@@ -17,9 +17,10 @@ export class Scenery {
   }
 
   async initializeScenery() {
-    this.model = await this.fbxLoader.loadAsync("wooden-cave.fbx");
-    this.model.position.set(0, 0, -500);
-    this.model.scale.set(0.055, 0.055, 0.055);
+    this.model = await this.fbxLoader.loadAsync("custom.fbx");
+    this.model.position.set(0, -93, -500);
+    this.model.rotateY(1.5707963268);
+    this.model.scale.set(0.2, 0.2, 0.2);
 
     this.createAndPutSceneryClone();
   }
