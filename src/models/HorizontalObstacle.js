@@ -13,7 +13,7 @@ export class HorizontalObstacle extends Obstacle {
   createObstacle(positionX) {
     const mesh = this.model.clone();
     mesh.scale.set(...HORIZONTAL_OBSTACLE_SCALE_ARRAY);
-    mesh.position.set(positionX, -25, 0);
+    mesh.position.set(positionX, -21, 0);
     return mesh;
   }
 }

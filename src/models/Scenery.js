@@ -12,13 +12,13 @@ export class Scenery {
   createAndPutSceneryClone() {
     this.modelClone = this.model.clone();
     const modelBox = new Box3().setFromObject(this.model);
-    this.scenerySize = modelBox.max.z - modelBox.min.z - 1; // minus 1 for joining models
-    this.modelClone.position.z = this.model.position.z + this.scenerySize;
+    this.scenerySize = modelBox.max.z - modelBox.min.z - 140; // minus 1 for joining models
+    this.modelClone.position.z = this.model.position.z - this.scenerySize;
   }
 
   async initializeScenery() {
     this.model = await this.fbxLoader.loadAsync("custom.fbx");
-    this.model.position.set(0, -93, -500);
+    this.model.position.set(0, -90, -500);
     this.model.rotateY(1.5707963268);
     this.model.scale.set(0.2, 0.2, 0.2);
 
