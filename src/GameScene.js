@@ -19,6 +19,7 @@ export class GameScene extends Scene {
   coinsGroup = new CoinGroup();
   eventBus = eventBus;
   coinsAmount = 0;
+  isGameOver = false;
 
   async loadModels() {
     this.add(this.lights.directionalLight, this.lights.ambientLight);
@@ -32,6 +33,7 @@ export class GameScene extends Scene {
 
     await this.player.makePlayerRun();
     await this.player.makePlayerJump();
+    await this.player.makePlayerStumble();
 
     await this.obstaclesGroup.load();
     // DONT FORGET ABOUT ADDING TO SCENE SOMEWHERE
@@ -46,9 +48,11 @@ export class GameScene extends Scene {
     const delta = this.clock.getDelta();
     if (!this.player.animationMixer) return;
     this.player.update(delta);
+    htmlUpdate(this.coinsAmount, this.player.lifes);
+
+    if (this.isGameOver) return;
     this.scenery.moveScenery(delta);
     TWEEN.update();
-    htmlUpdate(this.coinsAmount, this.player.lifes);
 
     this.obstaclesGroup.spawnObstacles(delta, this.scenery.speed);
     collisionDetect(
@@ -78,22 +82,27 @@ export class GameScene extends Scene {
     this.eventBus.on(EVENTS.ARROW_UP_CLICK, () => {
       this.player.jump();
     });
+    this.isGameOver = false;
+    this.play = true;
+    this.speedInterval = setInterval(
+      () => this.scenery.updateScenerySpeed(),
+      20000
+    );
   }
 
   increaseCoinsAmount = () => {
     this.coinsAmount++;
   };
 
-  startGame = () => {
-    this.play = true;
-    this.speedInterval = setInterval(
-      () => this.scenery.updateScenerySpeed(),
-      20000
-    );
-  };
-
   gameOver = () => {
-    this.play = false;
+    this.isGameOver = true;
+    this.player.stumble();
+    this.player.animationMixer.addEventListener("finished", () => {
+      this.clock.stop();
+      this.play = false;
+      document.querySelector(".game-over").style.display = "flex";
+    });
+
     clearInterval(this.speedInterval);
   };
 }

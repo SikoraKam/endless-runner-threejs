@@ -1,6 +1,4 @@
-import { COIN_COLLISION_RANGE, OBSTACLE_COLLISION_RANGE, TRACK } from "./const";
-import { throttle, debounce } from "lodash";
-import EVENTS from "./events/events";
+import { OBSTACLE_COLLISION_RANGE, TRACK } from "./const";
 
 export const onWindowResize = (camera, renderer) => {
   const width = window.innerWidth;

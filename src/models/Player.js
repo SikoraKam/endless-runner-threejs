@@ -26,6 +26,7 @@ export class Player {
   currentAnimation;
   runningAnimation;
   jumpingAnimation;
+  stumblingAnimation;
   isJumping = false;
   currentTrack = TRACK.CENTER;
   modelBox = new Mesh(
@@ -68,6 +69,11 @@ export class Player {
   async makePlayerJump() {
     const { animations } = await this.fbxLoader.loadAsync("running-jump.fbx");
     this.jumpingAnimation = this.animationMixer.clipAction(animations[0]);
+  }
+
+  async makePlayerStumble() {
+    const { animations } = await this.fbxLoader.loadAsync("stumbling.fbx");
+    this.stumblingAnimation = this.animationMixer.clipAction(animations[0]);
   }
 
   changeTrackAnimation() {
@@ -151,13 +157,25 @@ export class Player {
     );
     jumpingDownAnimation.onComplete(() => {
       this.isJumping = false;
-      // this.model.position.y = -35;
     });
 
     jumpingUpAnimation.start();
     jumpingUpAnimation.onComplete(() => {
       jumpingDownAnimation.start();
     });
+  }
+
+  stumble() {
+    this.model.position.z += 10;
+    this.model.position.y = -35;
+
+    this.currentAnimation.crossFadeTo(this.stumblingAnimation, 0, false).play();
+    this.currentAnimation = this.stumblingAnimation;
+    this.currentAnimation.reset();
+
+    this.currentAnimation.setLoop(1, 1);
+    this.currentAnimation.clampWhenFinished = true;
+    this.currentAnimation.play();
   }
 
   update(deltaTime) {
