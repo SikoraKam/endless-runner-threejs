@@ -21,17 +21,18 @@ export class Scenery {
     this.model.position.set(0, -90, -500);
     this.model.rotateY(1.5707963268);
     this.model.scale.set(0.2, 0.2, 0.2);
-
     this.createAndPutSceneryClone();
+  }
+
+  updateScenerySpeed() {
+    this.speed += 50;
   }
 
   moveScenery(deltaTime) {
     this.model.position.z += this.speed * deltaTime;
     this.modelClone.position.z += this.speed * deltaTime;
-
     if (this.model.position.z > DISTANCE_TO_SWITCH_SCENERY)
       this.model.position.z = this.modelClone.position.z - this.scenerySize;
-
     if (this.modelClone.position.z > DISTANCE_TO_SWITCH_SCENERY)
       this.modelClone.position.z = this.model.position.z - this.scenerySize;
   }

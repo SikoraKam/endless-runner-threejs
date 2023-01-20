@@ -17,6 +17,7 @@ import {
   TRACK,
 } from "../const";
 import { TWEEN } from "three/examples/jsm/libs/tween.module.min";
+import { gameOver } from "../../main";
 
 export class Player {
   fbxLoader = new FBXLoader();
@@ -32,6 +33,12 @@ export class Player {
     new MeshPhongMaterial({ color: 0x0000ff })
   );
   boxCollider = new Box3(new Vector3(), new Vector3());
+  lifes = 4;
+
+  updateLifesNumber() {
+    if (this.lifes > 0) this.lifes -= 1;
+    if (this.lifes === 0) gameOver();
+  }
 
   setPlayerBox() {
     this.modelBox.scale.set(50, 200, 20);
