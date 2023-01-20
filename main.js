@@ -31,19 +31,16 @@ const initScene = async () => {
 
 export const gameOver = () => {
   gameScene.gameOver();
-  setTimeout(() => {
-    document.querySelector(".game-over").style.display = "flex";
-    initScene();
-  }, 1000);
 };
 
 window.addEventListener("resize", () =>
   onWindowResize(perspectiveCamera, renderer)
 );
 document.querySelector(".play-again").addEventListener("click", () => {
-  gameScene.startGame();
-  animationLoop();
-  document.querySelector(".game-over").style.display = "none";
+  initScene().then(() => {
+    animationLoop();
+    document.querySelector(".game-over").style.display = "none";
+  });
 });
 
 new InputController();

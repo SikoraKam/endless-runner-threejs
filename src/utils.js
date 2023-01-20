@@ -1,4 +1,4 @@
-import { COIN_COLLISION_RANGE, OBSTACLE_COLLISION_RANGE, TRACK } from "./const";
+import { OBSTACLE_COLLISION_RANGE, TRACK } from "./const";
 
 export const onWindowResize = (camera, renderer) => {
   const width = window.innerWidth;
@@ -20,6 +20,7 @@ const getObstacleOnTrack = (track, obstacleGroup) => {
   if (track === TRACK.RIGHT) return sortedByPosition[2];
 };
 
+let collisionDetected = false; // blocks executing detection with one obstacle more than one time
 export const collisionDetect = (player, obstacleGroup, obstacleBox) => {
   const obstaclePositionZ = obstacleGroup.position.z;
   const playerPositionZ = player.model.position.z;
@@ -39,7 +40,15 @@ export const collisionDetect = (player, obstacleGroup, obstacleBox) => {
   if (!obstacleOnTrack) return;
   obstacleBox.setFromObject(obstacleOnTrack);
 
-  if (player.boxCollider.intersectsBox(obstacleBox)) player.updateLifesNumber();
+  if (player.boxCollider.intersectsBox(obstacleBox)) {
+    if (collisionDetected) return;
+    collisionDetected = true;
+
+    player.updateLifesNumber();
+    setTimeout(() => {
+      collisionDetected = false;
+    }, 500);
+  }
 };
 
 const getCoinsOnTrack = (track, coinsGroup) => {
