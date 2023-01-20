@@ -9,10 +9,6 @@ export const onWindowResize = (camera, renderer) => {
   renderer.setSize(width, height);
 };
 
-export const gameOver = () => {
-  console.log("game over");
-};
-
 const getObstacleOnTrack = (track, obstacleGroup) => {
   // obstacles were randomly placed in createObstacleGroup to receive different layouts
   const sortedByPosition = obstacleGroup.children.sort(
@@ -43,7 +39,7 @@ export const collisionDetect = (player, obstacleGroup, obstacleBox) => {
   if (!obstacleOnTrack) return;
   obstacleBox.setFromObject(obstacleOnTrack);
 
-  if (player.boxCollider.intersectsBox(obstacleBox)) gameOver();
+  if (player.boxCollider.intersectsBox(obstacleBox)) player.updateLifesNumber();
 };
 
 const getCoinsOnTrack = (track, coinsGroup) => {

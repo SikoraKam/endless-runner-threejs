@@ -42,15 +42,13 @@ export class GameScene extends Scene {
     this.add(this.coinsGroup.visibleCoinsGroup);
   }
 
-  cleanup() {}
-
   update() {
     const delta = this.clock.getDelta();
     if (!this.player.animationMixer) return;
     this.player.update(delta);
     this.scenery.moveScenery(delta);
     TWEEN.update();
-    htmlUpdate(this.coinsAmount);
+    htmlUpdate(this.coinsAmount, this.player.lifes);
 
     this.obstaclesGroup.spawnObstacles(delta, this.scenery.speed);
     collisionDetect(
@@ -84,5 +82,18 @@ export class GameScene extends Scene {
 
   increaseCoinsAmount = () => {
     this.coinsAmount++;
+  };
+
+  startGame = () => {
+    this.play = true;
+    this.speedInterval = setInterval(
+      () => this.scenery.updateScenerySpeed(),
+      20000
+    );
+  };
+
+  gameOver = () => {
+    this.play = false;
+    clearInterval(this.speedInterval);
   };
 }
