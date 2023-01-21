@@ -9,7 +9,7 @@ import { HorizontalObstacle } from "./models/HorizontalObstacle";
 import { Box3, Group, Object3D, Vector3 } from "three";
 
 export class ObstaclesGroups {
-  obstaclesArray = [];
+  // only one instance of each obstacle type. Clone existing object instead of creating new one by constructor
   verticalObstacle = new VerticalObstacle();
   horizontalObstacle = new HorizontalObstacle();
   emptyObstacleImitation = new Object3D();
@@ -37,6 +37,7 @@ export class ObstaclesGroups {
   createObstacleOnLeft(obstacleObject) {
     if (!obstacleObject)
       return this.createEmptyObstacleImitation(OBSTACLE_LEFT_POSITION_X);
+    // clones existing object into passed position
     return obstacleObject.createObstacle(OBSTACLE_LEFT_POSITION_X);
   }
 
@@ -58,12 +59,13 @@ export class ObstaclesGroups {
     return random < 1 ? this.verticalObstacle : this.horizontalObstacle;
   }
 
-  placeObstaclesOnRandomPosition(array) {
-    for (let i = array.length - 1; i > 0; i--) {
-      const j = Math.floor(Math.random() * (i + 1));
-      [array[i], array[j]] = [array[j], array[i]];
-    }
-  }
+  // might be unnecessary
+  // placeObstaclesOnRandomPosition(array) {
+  //   for (let i = array.length - 1; i > 0; i--) {
+  //     const j = Math.floor(Math.random() * (i + 1));
+  //     [array[i], array[j]] = [array[j], array[i]];
+  //   }
+  // }
 
   createObstacleGroup() {
     const generatedObstacles = Array.from(Array(3)).map(() =>
@@ -75,6 +77,7 @@ export class ObstaclesGroups {
     );
 
     // creating empty space when 3 horizontal
+    // in function createObstacleOnXXX null is treated like signal to create obstacle imitation
     if (!verticalObstacleArr.length) {
       const random = Math.floor(Math.random() * 3);
       generatedObstacles[random] = null;
@@ -86,16 +89,17 @@ export class ObstaclesGroups {
       this.createObstacleOnRight(generatedObstacles[2]),
     ];
 
-    this.placeObstaclesOnRandomPosition(placedObstacles);
+    // might be unnecessary
+    // this.placeObstaclesOnRandomPosition(placedObstacles);
 
     const meshGroup = new Group();
+
     placedObstacles.forEach((obstacle) => {
-      if (!obstacle) meshGroup.add(new Group());
       meshGroup.add(obstacle);
     });
+
     meshGroup.position.set(0, 0, DISTANCE_OF_NEXT_OBSTACLE_GROUP);
     meshGroup.visible = true;
-    this.obstaclesArray.push(meshGroup);
     return meshGroup;
   }
 
@@ -106,8 +110,11 @@ export class ObstaclesGroups {
     this.secondVisibleObstacleGroup.position.z += speed * delta;
 
     if (this.firstVisibleObstacleGroup.position.z > -40) {
+      // remove from gameScene so group is not visible
       this.firstVisibleObstacleGroup.removeFromParent();
+      // change group
       this.firstVisibleObstacleGroup = this.createObstacleGroup();
+      // add to game scene again
       gameScene.add(this.firstVisibleObstacleGroup);
     }
 

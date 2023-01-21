@@ -11,6 +11,7 @@ export default class InputController extends Controller {
   registerArrowListeners() {
     window.addEventListener(
       "keydown",
+      // blocks calling function for some time, prevents wrong calculation of current position
       throttle(
         (event) => {
           if (event.key === "ArrowLeft") {

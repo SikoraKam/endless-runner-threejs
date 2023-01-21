@@ -21,6 +21,7 @@ export class GameScene extends Scene {
   coinsAmount = 0;
   isGameOver = false;
 
+  // calls functions to load models, adds models to ThreeJs scene
   async loadModels() {
     this.add(this.lights.directionalLight, this.lights.ambientLight);
 
@@ -32,8 +33,8 @@ export class GameScene extends Scene {
     this.add(this.player.model);
 
     await this.player.makePlayerRun();
-    await this.player.makePlayerJump();
-    await this.player.makePlayerStumble();
+    await this.player.loadPlayerJump();
+    await this.player.loadPlayerStumble();
 
     await this.obstaclesGroup.load();
     // DONT FORGET ABOUT ADDING TO SCENE SOMEWHERE

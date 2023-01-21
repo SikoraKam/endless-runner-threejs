@@ -25,6 +25,7 @@ export const collisionDetect = (player, obstacleGroup, obstacleBox) => {
   const obstaclePositionZ = obstacleGroup.position.z;
   const playerPositionZ = player.model.position.z;
 
+  // execute function only when model is in some distance to obstacle
   if (
     playerPositionZ >= obstaclePositionZ + OBSTACLE_COLLISION_RANGE ||
     playerPositionZ <= obstaclePositionZ - OBSTACLE_COLLISION_RANGE
@@ -38,6 +39,7 @@ export const collisionDetect = (player, obstacleGroup, obstacleBox) => {
   );
 
   if (!obstacleOnTrack) return;
+  // sets collision box for obstacle based on model on current track
   obstacleBox.setFromObject(obstacleOnTrack);
 
   if (player.boxCollider.intersectsBox(obstacleBox)) {
