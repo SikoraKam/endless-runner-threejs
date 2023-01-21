@@ -66,12 +66,12 @@ export class Player {
     this.currentAnimation = this.runningAnimation;
   }
 
-  async makePlayerJump() {
+  async loadPlayerJump() {
     const { animations } = await this.fbxLoader.loadAsync("running-jump.fbx");
     this.jumpingAnimation = this.animationMixer.clipAction(animations[0]);
   }
 
-  async makePlayerStumble() {
+  async loadPlayerStumble() {
     const { animations } = await this.fbxLoader.loadAsync("stumbling.fbx");
     this.stumblingAnimation = this.animationMixer.clipAction(animations[0]);
   }
@@ -87,10 +87,12 @@ export class Player {
     this.currentTrack =
       this.currentTrack === TRACK.CENTER ? TRACK.LEFT : TRACK.CENTER;
 
+    // TWEEN module is for smooth position change
     const animationToLeft = new TWEEN.Tween(this.model.position)
       .to({ x: positionX - DISTANCE_BETWEEN_TRACKS }, MOVE_TO_SIDE_DURATION)
       .easing(TWEEN.Easing.Quadratic.Out)
       .onUpdate(() => {
+        // additional condition for safety reasons - resets position if sth went wrong
         if (positionX <= -DISTANCE_BETWEEN_TRACKS) {
           this.model.position.x = -DISTANCE_BETWEEN_TRACKS;
         }
@@ -133,15 +135,18 @@ export class Player {
     this.currentAnimation.stop();
     this.currentAnimation = this.jumpingAnimation;
     this.currentAnimation.reset();
+    // necessary when we want animation to play one once and detected "finished" event
     this.currentAnimation.setLoop(1, 1);
     this.currentAnimation.clampWhenFinished = true;
+
     this.currentAnimation.play();
     this.animationMixer.addEventListener("finished", () => {
       this.currentAnimation
-        .crossFadeTo(this.runningAnimation, 0.1, false)
+        .crossFadeTo(this.runningAnimation, 0.1, false) // smooth transition between animations
         .play();
       this.currentAnimation = this.runningAnimation;
     });
+    // Tween for smooth position change
     const jumpingUpAnimation = new TWEEN.Tween(this.model.position).to(
       {
         y: (this.model.position.y += HEIGHT_OF_JUMP),
@@ -178,6 +183,7 @@ export class Player {
     this.currentAnimation.play();
   }
 
+  // update animation and box collider position for detecting collisions
   update(deltaTime) {
     this.animationMixer.update(deltaTime);
     this.boxCollider.setFromObject(this.modelBox);

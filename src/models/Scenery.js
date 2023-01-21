@@ -5,14 +5,14 @@ import { DISTANCE_TO_SWITCH_SCENERY } from "../const";
 export class Scenery {
   fbxLoader = new FBXLoader();
   model = new Object3D();
-  modelClone = new Object3D(); // first is placed behind model, models are switched, scenery never ends
+  modelClone = new Object3D(); // firstly is placed behind original model, models are switched, scenery never ends
   scenerySize = 0;
   speed = 300;
 
   createAndPutSceneryClone() {
     this.modelClone = this.model.clone();
     const modelBox = new Box3().setFromObject(this.model);
-    this.scenerySize = modelBox.max.z - modelBox.min.z - 140; // minus 1 for joining models
+    this.scenerySize = modelBox.max.z - modelBox.min.z - 140; // minus 140 for joining models
     this.modelClone.position.z = this.model.position.z - this.scenerySize;
   }
 
@@ -29,8 +29,11 @@ export class Scenery {
   }
 
   moveScenery(deltaTime) {
+    // move scenery models towards player model
     this.model.position.z += this.speed * deltaTime;
     this.modelClone.position.z += this.speed * deltaTime;
+
+    // place behind second model when position is greater than threshold
     if (this.model.position.z > DISTANCE_TO_SWITCH_SCENERY)
       this.model.position.z = this.modelClone.position.z - this.scenerySize;
     if (this.modelClone.position.z > DISTANCE_TO_SWITCH_SCENERY)
