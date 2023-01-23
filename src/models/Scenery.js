@@ -7,7 +7,7 @@ export class Scenery {
   model = new Object3D();
   modelClone = new Object3D(); // firstly is placed behind original model, models are switched, scenery never ends
   scenerySize = 0;
-  speed = 300;
+  speed = 200;
 
   createAndPutSceneryClone() {
     this.modelClone = this.model.clone();
