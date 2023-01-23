@@ -122,8 +122,8 @@ export class ObstaclesGroups {
       this.secondVisibleObstacleGroup.removeFromParent();
       this.secondVisibleObstacleGroup = this.createObstacleGroup();
       gameScene.add(this.secondVisibleObstacleGroup);
-      this.secondVisibleObstacleGroup.position.z =
-        this.firstVisibleObstacleGroup.position.z - 450;
+      // this.secondVisibleObstacleGroup.position.z =
+      //   this.firstVisibleObstacleGroup.position.z - 450;
     }
   }
 
